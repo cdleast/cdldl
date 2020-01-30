@@ -5,7 +5,7 @@
         -->
         <el-menu
             :router="true"
-            :default-active="$route.path"
+            :default-active="activeChild"
             class="el-menu-vertical-demo"
             background-color="#545c64"
             text-color="#fff"
@@ -19,9 +19,9 @@
                 <i class="el-icon-user-solid"></i>
                 <span slot="title">会员管理</span>
             </el-menu-item>
-            <el-menu-item index="/supplier">
+            <el-menu-item index="/pages">
                 <i class="el-icon-s-cooperation"></i>
-                <span slot="title">供应商管理</span>
+                <span slot="title">功能展示</span>
             </el-menu-item>
             <el-menu-item index="/goods">
                 <i class="el-icon-s-goods"></i>
@@ -40,6 +40,20 @@ export default {
     name: "layout-navbar",
     data() {
         return {};
+    },
+    computed: {
+        // 我们使用计算属性来获取到当前点击的菜单的路由路径，然后设置default-active中的值
+        // 使得菜单在载入时就能对应高亮
+        activeChild() {
+            const route = this.$route;
+            const { meta, path } = route;
+            // if set path, the sidebar will highlight the path you set
+            // 可以在路由配置文件中设置自定义的路由路径到meta.activeChild属性中，来控制菜单自定义高亮显示
+            if (meta.activeChild) {
+                return meta.activeChild;
+            }
+            return path;
+        }
     },
     methods: {
         handleOpen(key, keyPath) {

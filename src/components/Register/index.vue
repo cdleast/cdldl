@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import loginApi from "@/api/login";
 export default {
     name: "register",
     data() {
@@ -83,6 +84,7 @@ export default {
                 password2: "", // 确认密码
                 identity: "" // 选择身份
             },
+            endRegisterUser: [], // 获取注册用户
             // 表单验证
             rules: {
                 name: [
@@ -141,11 +143,39 @@ export default {
             }
         };
     },
+    created() {
+        this.getRegister();
+    },
     methods: {
+        // 获取注册用户
+        getRegister() {
+            loginApi.getRegister().then(res => {
+                this.endRegisterUser = res.data;
+            });
+        },
         // 注册事件
         submitForm(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
+                    loginApi.register(this.registerUser).then(res => {
+                        // some es6语法:一真即真 只要其中一个为true 就会返回true的
+                        const some = this.endRegisterUser.some(res => {
+                            return res.email === this.registerUser.email;
+                        });
+
+                        if (!some) {
+                            this.$message({
+                                message: "注册账户成功!",
+                                type: "success"
+                            });
+                            this.$router.push("/login");
+                        } else {
+                            this.$message({
+                                message: "该账户已经注册，请重新填写!",
+                                type: "warning"
+                            });
+                        }
+                    });
                 } else {
                     return false;
                 }

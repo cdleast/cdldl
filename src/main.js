@@ -4,11 +4,16 @@ import 'element-ui/lib/theme-chalk/index.css' // ElementUI 样式
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import axios from 'axios'
+// import axios from 'axios'
+// import echarts from 'echarts'
+
 
 // 全局使用
 Vue.use(ElementUI)
-Vue.prototype.$axios = axios
+// Vue.prototype.$axios = axios
+// Vue.prototype.$echarts = echarts
+
+
 
 Vue.config.productionTip = process.env.NODE_ENV === 'production'
 // console.log(process.env.VUE_APP_SERVICE_URL) // 开发环境 development, 生产环境 production 

@@ -227,6 +227,7 @@ export default {
             // 因为需要跟分页做关联，所以这个就不用了，需要用分页的查询方法
             // 下面这个做分页只用了后台获取到的数据总数
             memberApi.getList().then(res => {
+                this.$store.dispatch("getMemberList", res.data);
                 this.memberList = res.data.reverse();
                 this.memberList = this.memberList.filter(member => {
                     let matchNum = true; // 会员卡号 筛选
@@ -244,7 +245,8 @@ export default {
                         matchPayType = member.payType == this.searchMap.payType;
                     }
                     if (this.searchMap.birthday) {
-                        matchBirthday = member.birthday == this.searchMap.birthday;
+                        matchBirthday =
+                            member.birthday == this.searchMap.birthday;
                     }
                     return (
                         matchNum && matchName && matchPayType && matchBirthday
@@ -253,7 +255,6 @@ export default {
                 this.total = this.memberList.length;
             });
         },
-
         // 当每页显示条数改变后,被触发 , val 是最新的每页显示条数
         handleSizeChange(val) {
             this.pageSize = val;

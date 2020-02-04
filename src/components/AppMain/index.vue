@@ -1,7 +1,8 @@
 <template>
     <div class="layout-main">
         <!-- 不显示首页的 -->
-        <app-link v-show="$route.path !== '/home'"></app-link>
+        <!-- <app-link v-show="$route.path !== '/home'"></app-link> -->
+        <app-link></app-link>
 
         <keep-alive>
             <router-view></router-view>

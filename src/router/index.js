@@ -2,19 +2,20 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import users from './users' // 登录注册
 import pages from './pages' // 功能展示
+import order from './order' // 功能展示
 
 
 Vue.use(VueRouter)
 
 
 const routes = [
-	...users, ...pages,
 	{
 		path: '/', name: 'layout', redirect: '/home', component: () => import('@/components/Layout'), children: [
 			{ path: '/home', meta: { title: '首页' }, name: 'home', component: () => import('@/views/home') },
 			{ path: '/member', meta: { title: '会员管理' }, name: 'member', component: () => import('@/views/member') },
 		]
 	},
+	...users, ...pages, ...order
 
 ]
 

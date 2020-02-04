@@ -2,6 +2,7 @@
     <div class="layout-navbar">
         <!--  default-active :　默认选中的菜单
             :router="true" true表示开启路由模式,开启之后, index值代表的就是路由地址
+            :unique-opened="true" 是否只保持一个子菜单的展开
         -->
         <el-menu
             :router="true"
@@ -10,6 +11,7 @@
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b"
+            :unique-opened="true"
         >
             <el-menu-item index="/home">
                 <i class="el-icon-s-home"></i>
@@ -19,17 +21,19 @@
                 <i class="el-icon-user-solid"></i>
                 <span slot="title">会员管理</span>
             </el-menu-item>
+            <el-submenu index="/order">
+                <template slot="title">
+                    <i class="el-icon-location"></i>
+                    <span>点餐系统</span>
+                </template>
+                <el-menu-item-group>
+                    <el-menu-item index="/orderMenu">菜单管理</el-menu-item>
+                    <el-menu-item index="/orderChild2">gouwuche</el-menu-item>
+                </el-menu-item-group>
+            </el-submenu>
             <el-menu-item index="/pages">
                 <i class="el-icon-s-cooperation"></i>
                 <span slot="title">功能展示</span>
-            </el-menu-item>
-            <el-menu-item index="/goods">
-                <i class="el-icon-s-goods"></i>
-                <span slot="title">商品管理</span>
-            </el-menu-item>
-            <el-menu-item index="/staff">
-                <i class="el-icon-user"></i>
-                <span slot="title">员工管理</span>
             </el-menu-item>
         </el-menu>
     </div>
@@ -79,5 +83,11 @@ export default {
 }
 .el-menu {
     border-right: none;
+}
+.el-menu /deep/ .el-menu-item-group__title {
+    display: none;
+}
+.el-menu-item-group .el-menu-item {
+    padding-left: 60px !important;
 }
 </style>

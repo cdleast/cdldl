@@ -40,10 +40,12 @@
 </template>
 
 <script>
+import loginApi from "@/api/login";
 export default {
     name: "login",
     data() {
         return {
+            endRegister: {}, // 已注册的账户
             loginUser: {
                 email: "", // 邮箱
                 password: "" // 密码
@@ -74,10 +76,44 @@ export default {
             }
         };
     },
+    created() {
+        this.getRegister();
+    },
     methods: {
+        getRegister() {
+            loginApi.getRegister().then(res => {
+                this.endRegister = res.data;
+            });
+        },
+        // 提交登录
         submitForm(formName) {
             this.$refs[formName].validate(valid => {
-                console.log("验证通过");
+                if (valid) {
+                    loginApi.login(this.loginUser).then(res => {
+                        const loginUserEmail = res.data;
+                        const products = this.endRegister.filter(register => {
+                            return (
+                                register.email === loginUserEmail.email &&
+                                register.password === loginUserEmail.password
+                            );
+                        });
+                        if (products) {
+                            // products存在存储到vuex中，调用setUser方法
+                            this.$store.dispatch("getUsers", products);
+                            // 验证成功
+                            this.$message({
+                                message: "登录成功!",
+                                type: "success"
+                            });
+                            this.$router.push("/home");
+                        } else {
+                            this.$message({
+                                message: "账户或密码错误!",
+                                type: "warning"
+                            });
+                        }
+                    });
+                }
             });
         }
     }

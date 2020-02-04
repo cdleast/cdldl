@@ -35,7 +35,7 @@ export default {
     margin-bottom: 10px;
     position: absolute;
     top: 15px;
-    left: 200px;
+    left: 300px;
 }
 .el-row a{
     color: #1989fa;

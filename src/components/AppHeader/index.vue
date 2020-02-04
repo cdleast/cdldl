@@ -5,7 +5,7 @@
         </router-link>
         <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
-                下拉菜单
+                <span v-for="(item,index) in getUsers" :key="index">{{item.name}}</span>
                 <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
     name: "layout-header",
     data() {
@@ -79,6 +80,9 @@ export default {
                 ]
             }
         };
+    },
+    computed: {
+        ...mapGetters(["getUsers"])
     },
     methods: {
         // 判断下拉点击的是哪个

@@ -1,0 +1,6 @@
+/* thead 表头加粗 */
+.el-table__header .has-gutter th .cell {
+    font-weight: 700;
+    color: #000;
+}
+

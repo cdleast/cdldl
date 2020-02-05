@@ -28,7 +28,7 @@
                 </template>
                 <el-menu-item-group>
                     <el-menu-item index="/orderMenu">菜单管理</el-menu-item>
-                    <el-menu-item index="/orderChild2">gouwuche</el-menu-item>
+                    <el-menu-item index="/orderManagement">功能管理</el-menu-item>
                 </el-menu-item-group>
             </el-submenu>
             <el-menu-item index="/pages">

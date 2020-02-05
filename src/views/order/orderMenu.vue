@@ -6,8 +6,12 @@
         <el-row :gutter="20">
             <!-- 菜单 -->
             <el-col :span="16">
-                <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName">
-                    <el-table-column prop="type" label="类型"></el-table-column>
+                <el-table
+                    :data="getMenuItems"
+                    style="width: 100%"
+                    :row-class-name="tableRowClassName"
+                >
+                    <el-table-column prop="name" label="类型"></el-table-column>
                     <el-table-column prop="size" label="尺寸"></el-table-column>
                     <el-table-column prop="price" label="价格"></el-table-column>
                     <el-table-column label="加入">
@@ -27,14 +31,14 @@
             <!-- 购物车 -->
             <el-col :span="8">
                 <el-table :data="baskets" style="width: 100%" :row-class-name="tableRowClassName">
-                    <el-table-column prop="num" label="数量">
+                    <el-table-column label="数量">
                         <template slot-scope="scope">
                             <el-button @click="decreaseQuantity(scope.row)" type="text">-</el-button>
                             <span class="input-number">{{scope.row.quantity}}</span>
                             <el-button @click="increaseQuantity(scope.row)" type="text">+</el-button>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="type" label="品种"></el-table-column>
+                    <el-table-column prop="name" label="品种"></el-table-column>
                     <el-table-column prop="price" label="价格"></el-table-column>
                 </el-table>
                 <template v-if="baskets.length > 0">
@@ -49,57 +53,20 @@
 </template>
 
 <script>
-const durian = "这是喜欢吃榴莲朋友的最佳选择";
-const cheese = "芝士杀手,浓浓的芝士丝, 食欲瞬间爆棚";
-const hawaii = "众多人的默认选择";
+import orderApi from "@/api/order";
 export default {
     name: "orderMenu",
     data() {
         return {
-            // 菜单
-            tableData: [
-                {
-                    type: "榴莲pizza",
-                    size: 19,
-                    price: 28,
-                    description: durian
-                },
-                {
-                    type: "榴莲pizza",
-                    size: 29,
-                    price: 38,
-                    description: durian
-                },
-                {
-                    type: "芝士pizza",
-                    size: 39,
-                    price: 48,
-                    description: cheese
-                },
-                {
-                    type: "芝士pizza",
-                    size: 49,
-                    price: 58,
-                    description: cheese
-                },
-                {
-                    type: "夏威夷pizza",
-                    size: 59,
-                    price: 68,
-                    description: hawaii
-                },
-                {
-                    type: "夏威夷pizza",
-                    size: 69,
-                    price: 78,
-                    description: hawaii
-                }
-            ],
-            baskets: [], // 购物车数据
-            num: 1 // 购物车默认数量
+            // tableData: [], // 菜单，因为用到了vuex，所以这块就不用了
+            baskets: [] // 购物车数据
         };
     },
     computed: {
+        // 在vuex中获取菜单商品信息
+        getMenuItems() {
+            return this.$store.getters.getMenuItems;
+        },
         // 购物车总价
         total() {
             let totalCost = 0;
@@ -113,19 +80,24 @@ export default {
             return totalCost;
         }
     },
+    created() {
+        this.getTableData();
+    },
     methods: {
-        // 隔行变色
-        tableRowClassName({ row, rowIndex }) {
-            if (rowIndex % 2 == 1) {
-                return "warning-row";
-            } else {
-                return "success-row";
-            }
+        // 获取商品信息
+        getTableData() {
+            orderApi.getList().then(res => {
+                // this.tableData = res.data;
+                // 将请求下来的数据存储到vuex中,调用mutations中的setMenuItems方法
+                // dispatch：含有异步操作，例如向后台提交数据
+                // commit：同步操作
+                this.$store.commit("setMenuItems", res.data);
+            });
         },
         // 添加到购物车
         addToBasket(index, row) {
             let basket = {
-                type: row.type,
+                name: row.name,
                 size: row.size,
                 price: row.price,
                 quantity: 1 // 自己定义的，没次都会加，后面进行累加
@@ -138,9 +110,9 @@ export default {
                 // 先过滤
                 let result = this.baskets.filter(basket => {
                     // 拿到数组里面的每一个对象，进行匹配
-                    // 如果添加的basket的type和price===row的type和price，代表购物车里面已经有了这个类型的商品
+                    // 如果添加的basket的name和price===row的name和price，代表购物车里面已经有了这个类型的商品
                     return (
-                        basket.type === row.type && basket.price === row.price
+                        basket.name === row.name && basket.price === row.price
                     );
                 });
 
@@ -172,25 +144,26 @@ export default {
         // 商品为0的时候在购物车中移除
         removeFromBasket(item) {
             this.baskets.splice(this.baskets.indexOf(item), 1);
+        },
+        // 隔行变色
+        tableRowClassName({ row, rowIndex }) {
+            if (rowIndex % 2 == 1) {
+                return "warning-row";
+            } else {
+                return "success-row";
+            }
         }
     }
 };
 </script>
 
 <style lang='scss' scoped>
-.orderMenu /deep/ th.is-leaf > .cell {
-    font-weight: 700;
-    color: #000;
-}
-.orderMenu /deep/ td.el-table_1_column_1 > .cell {
-    color: #409EFF;
-    font-size: 20px;
-    font-weight: 700;
-}
+// 总价
 .total-price {
     font-size: 14px;
     margin: 10px 0;
 }
+// 提交按钮
 .submit-total-price,
 .submit-total-price .el-button {
     width: 100%;
@@ -198,7 +171,7 @@ export default {
 // 计步器
 .input-number {
     padding: 0 10px;
-    color: #409EFF;
+    color: #409eff;
 }
 // 隔行变色
 // .orderMenu /deep/ .warning-row {

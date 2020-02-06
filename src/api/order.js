@@ -24,5 +24,14 @@ export default {
             url: `/order/${id}`,
             method: 'delete'
         })
+    },
+
+    // 添加到购物车
+    addBasket(pojo){
+        return request({
+            url: '/orderBasket',
+            method: 'post',
+            data: pojo
+        })
     }
 }

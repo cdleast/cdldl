@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import users from './users' // 登录注册
 import pages from './pages' // 功能展示
 import order from './order' // 功能展示
+import meituan from './meituan' // 美团移动
 
 
 Vue.use(VueRouter)
@@ -15,7 +16,7 @@ const routes = [
 			{ path: '/member', meta: { title: '会员管理' }, name: 'member', component: () => import('@/views/member') },
 		]
 	},
-	...users, ...pages, ...order
+	...users, ...meituan, ...pages, ...order
 
 ]
 

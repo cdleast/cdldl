@@ -18,7 +18,7 @@
                         <el-input v-model="newPizza.price"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="onSubmit">立即创建</el-button>
+                        <el-button type="primary" @click="onSubmit">添加商品</el-button>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -26,8 +26,9 @@
             <!-- 品种展示 -->
             <el-col :span="8">
                 <div class="management-title">品种展示</div>
-                <el-table :data="getMenuItems" style="width: 100%">
+                <el-table :data="getMenuItems">
                     <el-table-column prop="name" label="品种"></el-table-column>
+                    <el-table-column prop="size" label="尺寸"></el-table-column>
                     <el-table-column label="删除">
                         <template slot-scope="scope">
                             <el-button

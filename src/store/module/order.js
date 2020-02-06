@@ -1,12 +1,14 @@
 // 设置属性，主要承载一些属性，存储数据的
 const state = {
-    menuItems: [] // 菜单信息
+    menuItems: [], // 菜单信息
+    basketItems: [] // 购物车数据
 }
 
 // 对应的一些方法,用来获取到属性(state)的状态
 const getters = {
     // 菜单信息
-    getMenuItems: state => state.menuItems
+    getMenuItems: state => state.menuItems,
+    getBasketItems: state => state.basketItems
 }
 
 // 主要用来更改属性(state)的状态，完全是同步的操作
@@ -30,6 +32,11 @@ const mutations = {
             }
         });
     },
+
+    // 添加到购物车
+    addBasket(state, data) {
+        state.basketItems.push(data);
+    }
 }
 
 // 不直接操作，应用mutations，可以实现异步的操作

@@ -17,6 +17,10 @@
                 <i class="el-icon-s-home"></i>
                 <span slot="title">首页</span>
             </el-menu-item>
+            <el-menu-item index="/meituan">
+                <i class="el-icon-user-solid"></i>
+                <span slot="title">美团移动</span>
+            </el-menu-item>
             <el-menu-item index="/member">
                 <i class="el-icon-user-solid"></i>
                 <span slot="title">会员管理</span>
